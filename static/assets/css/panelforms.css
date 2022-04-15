@@ -1,0 +1,9 @@
+.panelforms{
+    background-color: #dadada;
+    color: black;
+    max-width: 50%;
+    margin: auto;
+    border:5px solid #269d9d;
+    padding: 2%;
+    margin-bottom: 2rem;
+}

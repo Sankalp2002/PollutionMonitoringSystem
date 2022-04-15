@@ -17,8 +17,14 @@ from django.contrib import admin
 from django.urls import path
 from myapp import views
 from django.conf.urls import include 
+from myapp import views as mviews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('Pollution/',include('myapp.urls')),
+    # path('', views.showRecommendation, name='showRecommendation'),
+    # path('register', mviews.registerView, name='registerView'),
+    # path('login', mviews.loginView, name='loginView'),
+    # path('logout/',mviews.logoutView,name='logoutView'),
+    # path('home/<str:pid>',mviews.errorview,name='errorview'),
 ]

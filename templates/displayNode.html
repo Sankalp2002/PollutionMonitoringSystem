@@ -1,0 +1,42 @@
+{% extends "sitebase.html" %}
+{% load static %}
+{% block title %}
+  <title>Node Status</title>
+{% endblock %}
+{% block content %}
+<link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icons/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'images/icons/site.webmanifest' %}">
+
+<br><br>
+<div class="container">
+    <H4 class="text-center">Node Status</H4><br>
+    <table class="table table-light table-hover table-bordered table-striped">
+        <thead class="bg-info">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Installation Date</th>
+                <th scope="col">MQ135 Value</th>
+                <th scope="col">MQ5 Value</th>
+                <th scope="col">MQ7 Value</th>
+                <th scope="col">Pollution Alert</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td> {{node.node_Id}}</td>
+                <td> {{node.installedDate}}</td>
+                <td>{{node.mq135}}</td>
+                <td>{{node.mq5}}</td>
+                <td>{{node.mq7}}</td>
+                <td>{{node.alert}}</td>
+            </tr>
+
+        </tbody>
+    
+    </table>
+</div>
+
+
+{% endblock %}

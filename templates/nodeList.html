@@ -1,0 +1,54 @@
+{% extends "sitebase.html" %}
+{% load static %}
+{% block title %}
+  <title>All Nodes</title>
+{% endblock %}
+{% block content %}
+<link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icons/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'images/icons/site.webmanifest' %}">
+
+<br><br>
+<div class="container">
+    <H4 class="text-center">POLLUTION MONITORING NODES DETAILS</H4><br>
+    <table class="table table-light table-hover table-bordered table-striped">
+        <thead class="bg-info">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Installation Date</th>
+                <th scope="col">MQ135 present?</th>
+                <th scope="col">MQ5 present?</th>
+                <th scope="col">MQ7 present?</th>
+                <th scope="col">Latitude</th>
+                <th scope="col">Longitude</th>
+                <th scope="col">Pollution Alert</th>
+                <th class="text-right">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in nodes %}
+            <tr>
+                <td> {{t.node_Id}}</td>
+                <td> {{t.installedDate}}</td>
+                <td>{{t.isMQ135}}</td>
+                <td>{{t.isMQ5}}</td>
+                <td>{{t.isMQ7}}</td>
+                <td>{{t.latitude}}</td>
+                <td>{{t.longitude}}</td>
+                <td>{{t.alert}}</td>
+                <td class="text-right">
+                    
+                    <button class="btn btn-primary badge-pill" style="width: 80px;margin: 1px;"><a  style="text-decoration: none;color: white;" href="{% url 'displayNode' t.node_Id  %}">VIEW</a> </button>
+                    <button class="btn btn-danger badge-pill" style="width: 80px;margin: 1px;"><a  style="text-decoration: none;color: white;" href="{% url 'removeNode' t.node_Id  %}">REMOVE</a> </button>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    
+    </table>
+</div>
+
+
+{% endblock %}

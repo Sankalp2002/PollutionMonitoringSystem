@@ -1,0 +1,32 @@
+{% extends "sitebase.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}
+  <title>New Node</title>
+{% endblock %}
+{% block content %}
+<link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icons/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'images/icons/site.webmanifest' %}">
+<link rel="stylesheet" href="{% static 'assets/css/panelforms.css' %}">
+
+<br><br>
+<div class="panelforms">
+    <form action="{% url 'addNode' %}" method="post">
+        <h2 class="header">New Node</h2>
+       <div class="illustration"><i class="icon ion-clipboard"></i></div>
+        <div class="form-group">{{ form.installedDate|as_crispy_field }}</div>
+        <div class="form-group">{{ form.isMQ135|as_crispy_field }}</div>
+        <div class="form-group">{{ form.isMQ5|as_crispy_field }}</div>
+        <div class="form-group">{{ form.isMQ7|as_crispy_field }}</div>
+        <div class="form-group">{{ form.latitude|as_crispy_field }}</div>
+        <div class="form-group">{{ form.longitude|as_crispy_field }}</div>
+        
+        {% csrf_token %}
+        <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Post</button></div>
+      </form>
+  </div>
+
+
+{% endblock %}
