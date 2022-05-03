@@ -1,0 +1,28 @@
+{% extends "sitebase.html" %}
+{% load static %}
+{% block title %}
+  <title>Past 20 data entries of all Nodes</title>
+  <meta http-equiv="refresh" content="5">
+{% endblock %}
+{% block content %}
+<link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icons/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'images/icons/site.webmanifest' %}">
+
+<br><br>
+<div class="container">
+    <h4 class="text-center">Graphical analysis</h4><br>
+    <div class="flex" >
+        {% for key, value in plots.items %} 
+        {% autoescape off %}
+        <h4 class="text-center">Graph for Node:{{key}}</h4>
+        {{value}}
+        <br>
+        {% endautoescape %}
+        {% endfor %}
+     </div>>
+</div>
+
+
+{% endblock %}

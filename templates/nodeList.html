@@ -11,17 +11,36 @@
 
 <br><br>
 <div class="container">
+    <H4 class="text-center">POLLUTION ALERT AT THE FOLLOWING NODES!</H4><br>
+    <table class="table table-light table-hover table-bordered table-striped">
+        <thead class="bg-info">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in alertnodes %}
+            <tr>
+                <td> {{t.node_Id}}</td>
+                <td>{{t.location}}</td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    
+    </table>
+
+
+
+
     <H4 class="text-center">POLLUTION MONITORING NODES DETAILS</H4><br>
     <table class="table table-light table-hover table-bordered table-striped">
         <thead class="bg-info">
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Installation Date</th>
-                <th scope="col">MQ135 present?</th>
-                <th scope="col">MQ5 present?</th>
-                <th scope="col">MQ7 present?</th>
-                <th scope="col">Latitude</th>
-                <th scope="col">Longitude</th>
+                <th scope="col">Location</th>
                 <th scope="col">Pollution Alert</th>
                 <th class="text-right">Action</th>
             </tr>
@@ -31,16 +50,12 @@
             <tr>
                 <td> {{t.node_Id}}</td>
                 <td> {{t.installedDate}}</td>
-                <td>{{t.isMQ135}}</td>
-                <td>{{t.isMQ5}}</td>
-                <td>{{t.isMQ7}}</td>
-                <td>{{t.latitude}}</td>
-                <td>{{t.longitude}}</td>
+                <td>{{t.location}}</td>
                 <td>{{t.alert}}</td>
                 <td class="text-right">
-                    
-                    <button class="btn btn-primary badge-pill" style="width: 80px;margin: 1px;"><a  style="text-decoration: none;color: white;" href="{% url 'displayNode' t.node_Id  %}">VIEW</a> </button>
-                    <button class="btn btn-danger badge-pill" style="width: 80px;margin: 1px;"><a  style="text-decoration: none;color: white;" href="{% url 'removeNode' t.node_Id  %}">REMOVE</a> </button>
+                    <button class="btn btn-primary badge-pill" style="width: 80px;margin: 1px;"><a  style="text-decoration: none;color: white;" href="{% url 'displayNode' t.node_Id  %}">VIEW</a> </button>             
+                    <button class="btn btn-primary badge-pill" style="width: 80px;margin: 1px;"><a  style="text-decoration: none;color: white;" href="{% url 'editNode' t.node_Id  %}">EDIT</a> </button>
+                    <button class="btn btn-danger badge-pill" style="width: 100px;margin: 1px;"><a  style="text-decoration: none;color: white;" href="{% url 'removeNode' t.node_Id  %}">REMOVE</a> </button>
                 </td>
             </tr>
             {% endfor %}

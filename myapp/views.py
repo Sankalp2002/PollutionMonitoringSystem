@@ -14,6 +14,12 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.http import HttpResponseRedirect, HttpResponse
 from .forms import NewNodeForm
+from .check import alertCheck
+from datetime import datetime as dt,timedelta
+import plotly.express as px
+from plotly.offline import plot
+from plotly.graph_objs import Scatter
+from django.db.models import Q
 
 @api_view(['GET', 'POST', 'DELETE'])
 def polView(request):
@@ -28,15 +34,10 @@ def polView(request):
         node=p['node_Id']
         serializer = polSerializer(data=p)
         if serializer.is_valid():
-            if Node.objects.filter(node_Id=node).exists() and not Pollution_Data.objects.filter(datetime=p['datetime']).exists():
+            if Node.objects.filter(node_Id=node).exists() and not Pollution_Data.objects.filter(Q(node_Id=node)&Q(datetimestamp=p['datetimestamp'])).exists():
                 serializer.save()
                 obj=Node.objects.get(node_Id=node)
-                if 'mq135' in p.keys():
-                    obj.mq135=p['mq135']
-                if 'mq5' in p.keys():
-                    obj.mq5=p['mq5']
-                if 'mq7' in p.keys():
-                    obj.mq7=p['mq7']
+                obj.mq135=p['mq135']
                 obj.save()
                 print("postrequest")
                 return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
@@ -50,8 +51,8 @@ def showNodes(request):
     if request.method == 'POST':
         return render(request, 'main.html',)
     else:
-        nodes = Node.objects.all()
-        return render(request, 'nodeList.html', {'nodes': nodes})
+        alertnodes,nodes= alertCheck()
+        return render(request, 'nodeList.html', {'alertnodes':alertnodes,'nodes': nodes})
 
 def displayNode(request,pid):
     if request.method == 'POST':
@@ -67,11 +68,54 @@ def addNode(request):
         if form.is_valid():
             n=form.save(commit=False)
             n.save()
-            return HttpResponseRedirect(reverse('showNodes'))
+            node=n.node_Id
+            form= NewNodeForm()
+            return render(request,'newNode.html',{'form':form,'node': node})
         else:
             print('Error')
-    return render(request,'newNode.html',{'form':form})
+    else:
+        return render(request,'newNode.html',{'form':form})
+
+def monitorNodes(request):
+    nodes=Node.objects.all()
+    plots_dict={}
+    for node in nodes:
+        d = timedelta(days = 60)
+        node_data=Pollution_Data.objects.filter(Q(node_Id=node.node_Id)&Q(datetimestamp__range=[dt.now()-d,dt.now()])).order_by('datetimestamp')
+        #node_data=Pollution_Data.objects.filter(node_Id=node.node_Id).order_by('datetimestamp')
+        #print(len(node_data))
+        y=[]
+        x=[]
+        for d in node_data:
+            y.append(d.mq135)
+            x.append(d.datetimestamp)
+        plot_div = plot([Scatter(x=x, y=y,
+                        mode='lines', name='test',
+                        opacity=0.8, marker_color='green')],
+               output_type='div')
+        plots_dict[node.node_Id]=plot_div
+    return render(request, 'monitor.html', {'plots': plots_dict})
+        
 
 def removeNode(request,pid):
     Node.objects.get(node_Id=pid).delete()
     return HttpResponseRedirect(reverse('showNodes'))
+
+def editNode(request,did):
+    if request.method=='POST':
+        location = request.POST.get('location')
+        node=Node.objects.get(node_Id=did)
+        node.location=location
+        node.save()
+        return HttpResponseRedirect(reverse('showNodes'))
+    else:
+        if did=='cancel':
+            return HttpResponseRedirect(reverse('showNodes'))
+        else:
+            node=Node.objects.get(node_Id=did)
+            return render(request,'editNode.html',{'node':node})
+
+def editNodecancel(request):
+    return HttpResponseRedirect(reverse('showNodes'))
+
+

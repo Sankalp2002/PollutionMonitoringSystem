@@ -1,38 +1,30 @@
 {% extends "sitebase.html" %}
 {% load static %}
-{% load crispy_forms_tags %}
 {% block title %}
-  <title>New Node</title>
+  <title>Edit Node</title>
 {% endblock %}
 {% block content %}
+{% load crispy_forms_tags %}
 <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icons/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icons/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icons/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'images/icons/site.webmanifest' %}">
 <link rel="stylesheet" href="{% static 'assets/css/panelforms.css' %}">
-
 <br><br>
 <div class="panelforms">
-  {% if node is not None %}
-  <div class="alert alert-success">
-    <a class="close" href="#" data-dismiss="alert">×</a>
-
-    Last Node added has been provided an unique ID:{{ node }}. Use it to configure that node.
-
-  </div>
-  {% else %}
-  
-  {% endif %}
-    <form action="{% url 'addNode' %}" method="post">
-        <h2 class="header">New Node</h2>
+    <form action="{% url 'editNode' node.node_Id %}" method="post">
+        <h2 class="header">Editing Node: {{node.node_Id}}</h2>
        <div class="illustration"><i class="icon ion-clipboard"></i></div>
-        <div class="form-group">{{ form.installedDate|as_crispy_field }}</div>
-        <div class="form-group">{{ form.location|as_crispy_field }}</div>
+
+       <label for="longitude">Location:</label>
+       <div class="form-group" id="location"><input class="form-control-ii" type="text"  name="location" placeholder="Location" value="{{node.location}}"></div>
         
+        
+       
         {% csrf_token %}
         <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Save</button></div>
       </form>
+      <div><a type="button" class="btn btn-danger btn-block" href="{% url 'editNodecancel' %}">Cancel</a></div>
   </div>
 
-
-{% endblock %}
+{% endblock %}          

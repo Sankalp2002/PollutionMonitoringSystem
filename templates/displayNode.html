@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %}
   <title>Node Status</title>
-  <!-- <meta http-equiv="refresh" content="5"> -->
+  <meta http-equiv="refresh" content="10">
 {% endblock %}
 {% block content %}
 <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icons/apple-touch-icon.png' %}">
@@ -19,8 +19,6 @@
                 <th scope="col">ID</th>
                 <th scope="col">Installation Date</th>
                 <th scope="col">MQ135 Value</th>
-                <th scope="col">MQ5 Value</th>
-                <th scope="col">MQ7 Value</th>
                 <th scope="col">Pollution Alert</th>
             </tr>
         </thead>
@@ -28,21 +26,7 @@
             <tr>
                 <td> {{node.node_Id}}</td>
                 <td> {{node.installedDate}}</td>
-                {% if node.isMQ135 %}
                 <td>{{node.mq135}}</td>
-                {% else %}
-                <td>NULL </td>
-                {% endif %}
-                {% if node.isMQ5 %}
-                <td>{{node.mq5}}</td>
-                {% else %}
-                <td>NULL </td>
-                {% endif %}
-                {% if node.isMQ7 %}
-                <td>{{node.mq7}}</td>
-                {% else %}
-                <td>NULL </td>
-                {% endif %}
                 <td>{{node.alert}}</td>
             </tr>
 
