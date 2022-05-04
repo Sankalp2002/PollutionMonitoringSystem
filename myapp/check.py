@@ -18,7 +18,7 @@ password = "Z5rCyYFT"
 def polCheck():
     nodes=Node.objects.all()
     for node in nodes:
-        if node.mq135>200:
+        if node.mq135>250:
             node.alert=True
             node.save()
 def alertCheck():
@@ -31,11 +31,11 @@ def alertCheck():
             alertnodes.append(node)
     nodes = Node.objects.all()
     if len(alertnodes)!=0:
-        message = """\
-        Subject: Hi there
-
-        Pollution alert"""
-
+        text = "Pollution alert at nodes with IDs "
+        for n in alertnodes:
+            text.append(n.node_Id)
+            text.append(',')
+        message='Subject: {}\n\n{}'.format("Pollution Alert", text)
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
             server.login(sender_email, password)
@@ -45,7 +45,7 @@ def alertCheck():
 
 tl = Timeloop()
 
-@tl.job(interval=timedelta(seconds=10))
+@tl.job(interval=timedelta(seconds=20))
 def check():
     alertCheck()
     
