@@ -16,7 +16,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from .forms import NewNodeForm
 from .check import alertCheck
 from datetime import datetime as dt,timedelta
-import plotly.express as px
 from plotly.offline import plot
 from plotly.graph_objs import Scatter
 from django.db.models import Q
