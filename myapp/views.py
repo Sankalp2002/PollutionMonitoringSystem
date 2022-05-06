@@ -60,7 +60,7 @@ def polView(request):
                 JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             print(serializer.errors)
-            obj=Node.objects.get(macAddress=mc).delete()
+            obj=Node.objects.get(macAddress=mac).delete()
             return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         pass
