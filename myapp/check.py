@@ -30,17 +30,17 @@ def alertCheck():
         if node.alert==True:
             alertnodes.append(node)
     nodes = Node.objects.all()
-    if len(alertnodes)!=0:
-        text = "Pollution alert at nodes with IDs "
-        for n in alertnodes:
-            text.append(n.node_Id)
-            text.append(',')
-        message='Subject: {}\n\n{}'.format("Pollution Alert", text)
-        context = ssl.create_default_context()
-        with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-            server.login(sender_email, password)
-            server.sendmail(sender_email, receiver_email, message)
-        HttpResponseRedirect(reverse('showNodes'))
+    # if len(alertnodes)!=0:
+    #     text = "Pollution alert at nodes with IDs "
+    #     for n in alertnodes:
+    #         text.append(n.node_Id)
+    #         text.append(',')
+    #     message='Subject: {}\n\n{}'.format("Pollution Alert", text)
+    #     context = ssl.create_default_context()
+    #     with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+    #         server.login(sender_email, password)
+    #         server.sendmail(sender_email, receiver_email, message)
+        #HttpResponseRedirect(reverse('showNodes'))
     return (alertnodes,nodes)
 
 tl = Timeloop()
@@ -49,9 +49,3 @@ tl = Timeloop()
 def check():
     alertCheck()
     
-    
-# if __name__ == "__main__":
-#     tl.start(block=True)
-# import plotly
-# plotly.tools.set_credentials_file(username='sankyplot', 
-# api_key='zsjuRWCY3GCpwpRb2vbT')

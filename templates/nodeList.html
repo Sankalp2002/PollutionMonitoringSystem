@@ -39,6 +39,7 @@
         <thead class="bg-info">
             <tr>
                 <th scope="col">ID</th>
+                <th scope="col">MAC Address</th>
                 <th scope="col">Installation Date</th>
                 <th scope="col">Location</th>
                 <th scope="col">Pollution Alert</th>
@@ -49,6 +50,7 @@
             {% for t in nodes %}
             <tr>
                 <td> {{t.node_Id}}</td>
+                <td> {{t.macAddress}}</td>
                 <td> {{t.installedDate}}</td>
                 <td>{{t.location}}</td>
                 <td>{{t.alert}}</td>

@@ -17,6 +17,7 @@
         <thead class="bg-info">
             <tr>
                 <th scope="col">ID</th>
+                <th scope="col">MAC Address</th>
                 <th scope="col">Installation Date</th>
                 <th scope="col">MQ135 Value</th>
                 <th scope="col">Pollution Alert</th>
@@ -25,6 +26,7 @@
         <tbody>
             <tr>
                 <td> {{node.node_Id}}</td>
+                <td> {{node.macAddress}}</td>
                 <td> {{node.installedDate}}</td>
                 <td>{{node.mq135}}</td>
                 <td>{{node.alert}}</td>

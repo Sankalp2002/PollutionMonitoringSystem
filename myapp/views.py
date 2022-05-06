@@ -30,16 +30,28 @@ def polView(request):
         return JsonResponse(serializer.data, safe=False)
     elif request.method == 'POST':
         p = JSONParser().parse(request)
+        mac=p['macAddress']
         node=p['node_Id']
         serializer = polSerializer(data=p)
         if serializer.is_valid():
-            if Node.objects.filter(node_Id=node).exists() and not Pollution_Data.objects.filter(Q(node_Id=node)&Q(datetimestamp=p['datetimestamp'])).exists():
-                serializer.save()
-                obj=Node.objects.get(node_Id=node)
-                obj.mq135=p['mq135']
-                obj.save()
-                print("postrequest")
-                return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+            if not Pollution_Data.objects.filter(Q(node_Id=node)&Q(datetimestamp=p['datetimestamp'])).exists():
+                if Node.objects.filter(node_Id=node).exists():
+                    serializer.save()
+                    obj=Node.objects.get(node_Id=node)
+                    obj.mq135=p['mq135']
+                    obj.macAddress=p['macAddress']
+                    obj.save()
+                    print("postrequest")
+                    return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+                else:
+                    dobj=serializer.save()
+                    obj=Node.objects.create()
+                    obj.mq135=dobj.mq135
+                    obj.macAddress=dobj.macAddress
+                    obj.save()
+                    dobj.node_Id=obj.node_Id
+                    print("postrequest")
+                    return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
