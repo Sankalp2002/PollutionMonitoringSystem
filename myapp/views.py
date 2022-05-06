@@ -2,6 +2,7 @@ from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from numpy import save
 from rest_framework.views import APIView
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser 
@@ -30,31 +31,37 @@ def polView(request):
         return JsonResponse(serializer.data, safe=False)
     elif request.method == 'POST':
         p = JSONParser().parse(request)
-        mac=p['macAddress']
-        node=p['node_Id']
         serializer = polSerializer(data=p)
+        mac=p['macAddress']
+        obj=Node.objects.create(macAddress=mac)
         if serializer.is_valid():
-            if not Pollution_Data.objects.filter(Q(node_Id=node)&Q(datetimestamp=p['datetimestamp'])).exists():
-                if Node.objects.filter(node_Id=node).exists():
+            if not Pollution_Data.objects.filter(Q(macAddress=mac)&Q(datetimestamp=p['datetimestamp'])).exists():
+                if Node.objects.filter(macAddress=mac).exists():
+                    obj=Node.objects.get(macAddress=mac)
+                    serializer.node_Id=obj.node_Id
                     serializer.save()
-                    obj=Node.objects.get(node_Id=node)
                     obj.mq135=p['mq135']
                     obj.macAddress=p['macAddress']
                     obj.save()
                     print("postrequest")
                     return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
                 else:
-                    dobj=serializer.save()
-                    obj=Node.objects.create()
+                    d=p['datetimestamp']
+                    mq=p['mq135']
+                    mc=p['macAddress']
+                    dobj=Pollution_Data.objects.create(datetimestamp=d,mq135=mq,macAddress=mc,save=False)
+                    dobj.save()
                     obj.mq135=dobj.mq135
                     obj.macAddress=dobj.macAddress
                     obj.save()
-                    dobj.node_Id=obj.node_Id
                     print("postrequest")
                     return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            print(serializer.errors)
+            obj=Node.objects.get(macAddress=mc).delete()
+            return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         pass
 
@@ -92,7 +99,7 @@ def monitorNodes(request):
     plots_dict={}
     for node in nodes:
         d = timedelta(days = 60)
-        node_data=Pollution_Data.objects.filter(Q(node_Id=node.node_Id)&Q(datetimestamp__range=[dt.now()-d,dt.now()])).order_by('datetimestamp')
+        node_data=Pollution_Data.objects.filter(Q(macAddress=node.macAddress)&Q(datetimestamp__range=[dt.now()-d,dt.now()])).order_by('datetimestamp')
         #node_data=Pollution_Data.objects.filter(node_Id=node.node_Id).order_by('datetimestamp')
         #print(len(node_data))
         y=[]

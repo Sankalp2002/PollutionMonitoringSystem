@@ -30,22 +30,22 @@ def alertCheck():
         if node.alert==True:
             alertnodes.append(node)
     nodes = Node.objects.all()
-    # if len(alertnodes)!=0:
-    #     text = "Pollution alert at nodes with IDs "
-    #     for n in alertnodes:
-    #         text.append(n.node_Id)
-    #         text.append(',')
-    #     message='Subject: {}\n\n{}'.format("Pollution Alert", text)
-    #     context = ssl.create_default_context()
-    #     with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-    #         server.login(sender_email, password)
-    #         server.sendmail(sender_email, receiver_email, message)
+    if len(alertnodes)!=0:
+        text = "Pollution alert at nodes with IDs "
+        for n in alertnodes:
+            text.append(n.node_Id)
+            text.append(',')
+        message='Subject: {}\n\n{}'.format("Pollution Alert", text)
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+            server.login(sender_email, password)
+            server.sendmail(sender_email, receiver_email, message)
         #HttpResponseRedirect(reverse('showNodes'))
     return (alertnodes,nodes)
 
 tl = Timeloop()
 
-@tl.job(interval=timedelta(seconds=20))
+@tl.job(interval=timedelta(seconds=60))
 def check():
     alertCheck()
     

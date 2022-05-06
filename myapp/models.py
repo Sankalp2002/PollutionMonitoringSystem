@@ -10,15 +10,14 @@ class Node(models.Model):
     mq135 = models.FloatField(blank=True, default=0)
     location=models.CharField(max_length=128, help_text="Enter location of the node",blank=True,default="None")
     alert=models.BooleanField(default=False)
-    macAddress=models.CharField(max_length=128,blank=False,default="None")
+    macAddress=models.CharField(max_length=128,blank=False,unique=True)
     def __str__(self):
         return str(self.node_Id)
 
 class Pollution_Data(models.Model):
     data_Id = models.AutoField(primary_key=True)
-    node_Id = models.ForeignKey(Node, on_delete=models.CASCADE,default=0)
     datetimestamp = models.DateTimeField(default=dt.now)
     mq135 = models.FloatField(blank=True, default=0)
-    macAddress=models.CharField(max_length=128,blank=False,default="None")
+    macAddress=models.ForeignKey(Node,to_field='macAddress', on_delete=models.CASCADE,default="None")
     def __str__(self):
         return str(self.datetimestamp)

@@ -3,4 +3,4 @@ from myapp.models import Pollution_Data
 class polSerializer(serializers.ModelSerializer):
     class Meta:
         model=Pollution_Data
-        fields=['datetimestamp','mq135','macAddress']
+        fields=('datetimestamp','mq135','macAddress')

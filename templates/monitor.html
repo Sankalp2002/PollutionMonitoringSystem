@@ -1,7 +1,7 @@
 {% extends "sitebase.html" %}
 {% load static %}
 {% block title %}
-  <title>Past 20 data entries of all Nodes</title>
+  <title>Plots of past 2 months of all Nodes</title>
   <meta http-equiv="refresh" content="30">
 {% endblock %}
 {% block content %}
@@ -20,6 +20,9 @@
         {{value}}
         <br>
         {% endautoescape %}
+        {% empty %}
+        <li>Sorry, we have no data to display.</li>
+
         {% endfor %}
      </div>>
 </div>
